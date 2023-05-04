@@ -1,0 +1,71 @@
+pipeline{
+    agent any
+    stages{
+        stage("Build"){
+            steps{
+                echo "Building"
+            }
+        }
+        stage("Unit and Integration Test"){
+            steps{
+                echo "Running Integration tests"
+                echo "Running unit and integration test on Junit"
+            }
+        }
+        stage("Code Analysis"){
+            steps{
+                echo "Performing code analysis using Veracode"
+            }
+        }
+        stage("Security Scan"){
+            steps{
+                echo "Cheking the code for vulnerabilities using OWASP ZAP"
+            }
+            post{
+                success{
+                    echo "Security Scan succesful"
+                    emailext to: "jesvinsabu3@gmail.com",
+                    subject: "Security Sacn Successfull",
+                    body: "Please find the attached log file",
+                    attachLog: true
+                }
+                failure{
+                    echo "Security Scan Failed"
+                    emailext to: "jesvinsabu3@gmail.com",
+                    subject: "Security Scan Failed",
+                    body: "Please find the attached log file",
+                    attachLog: true
+                }
+            }
+        }
+        stage("Deploy to staging"){
+            steps{
+                echo "Deploying the code to  Apache Tomcat staging server"
+            }
+        }
+        stage("Integration Test on staging"){
+            steps{
+                echo "Running integration test on staging"
+            }
+            post{
+                success{
+                    emailext to: "jesvinsabu3@gmail.com",
+                    subject: "Integration Successful",
+                    body: "Please find the attached log file",
+                    attachLog: true
+                }
+                failure{
+                    emailext to: "jesvinsabu3@gmail.com",
+                    subject: "Integration Test Failed",
+                    body: "Please find the attached log file",
+                    attachLog: true
+                }
+            }
+        }
+        stage("Deploy to production"){
+            steps{
+                echo "Deploying the code to production server Apache Tomcat"
+            }
+        }
+    }
+}
