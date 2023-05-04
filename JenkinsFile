@@ -49,12 +49,14 @@ pipeline{
             }
             post{
                 success{
+                    echo "Integration Test Succesful"
                     emailext to: "jesvinsabu3@gmail.com",
                     subject: "Integration Successful",
                     body: "Please find the attached log file",
                     attachLog: true
                 }
                 failure{
+                    echo "Integration Test Failed"
                     emailext to: "jesvinsabu3@gmail.com",
                     subject: "Integration Test Failed",
                     body: "Please find the attached log file",
